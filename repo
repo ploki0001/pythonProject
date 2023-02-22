@@ -33,4 +33,7 @@ print(df_tfidfvect)
 
 
 
+test = ['develop', 'new', 'glucos', 'sensor', 'vaccin', 'for']
+length = len(test.split())
+a = test.split()[:6]
 

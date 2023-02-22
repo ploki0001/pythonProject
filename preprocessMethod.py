@@ -4,11 +4,12 @@ from nltk.stem.lancaster import LancasterStemmer
 import numpy as np
 import re
 def preprocessData(file):
+    file = file.read().lower().split()
     new_text = ""
     for word in file:
         if word not in stopwords.words('english'):
             new_text = new_text + " " + word
-print()
+
     symbols = "!\"#$%&()*+-.,/:;<=>?@[\]^_`'{|}~\n"
     for i in symbols:
         new_text = np.char.replace(new_text, i, '')
@@ -26,7 +27,4 @@ print()
     filtered2 = [i for i in filtered1 if not regex2.match(i)]
     result = [i for i in filtered2 if not len(i) == 1]
 
-    str1 = ""
-    for ele in result:
-        str1 += ele+' '
-    return str1
+    return result
