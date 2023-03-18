@@ -1,25 +1,29 @@
+texts = []  # list of text samples
+labels_index = {}  # dictionary mapping label name to numeric id
+labels = []  # list of label ids
 import os
-import linecache
-from preprocessMethod import preprocessData
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
-from sklearn import metrics
 from matplotlib import pyplot as plt
 
-filenames = os.listdir(r'D:/360MoveData/Users/31365/Desktop/dataset')
-texts = []
-labels=[]
-for i in filenames:
-    path = 'D:/360MoveData/Users/31365/Desktop/dataset/' + i
-    with open(path, "r", encoding='utf-8') as file:
-        count = 1
-        lines = len(file.readlines())
-        for count in range(lines+1):
-                a = preprocessData(linecache.getline(path, count).strip())
-                texts.append(a)
-                labels.append(i)
+TEXT_DATA_DIR = 'D:/360MoveData/Users/31365/Desktop/20_newsgroup'
+for name in sorted(os.listdir(TEXT_DATA_DIR)):
+    path = os.path.join(TEXT_DATA_DIR, name)
+    if os.path.isdir(path):
+        label_id = len(labels_index)
+        labels_index[name] = label_id
+        if label_id == 2:
+            break
+        for fname in sorted(os.listdir(path)):
+            if fname.isdigit():
+                fpath = os.path.join(path, fname)
+                f = open(fpath,'r',encoding='latin-1')
+                texts.append(f.read().strip())
+                f.close()
+                labels.append(label_id)
 
 
+print('Found %s texts.' % len(texts))
+print(texts[0])
+print(labels)
 
 ######，我们可以新闻样本转化为神经网络训练所用的张量。
 # 所用到的Keras库是keras.preprocessing.text.Tokenizer和keras.preprocessing.sequence.pad_sequences。代码如下所示
@@ -101,8 +105,7 @@ from keras.models import *
 from keras.layers import *
 from keras.applications import *
 from keras.preprocessing.image import *
-print(x_train.shape)
-sequence_input = Input(shape=(None, 30), dtype='int32')
+sequence_input = Input(shape=(10036,), dtype='int32')
 embedded_sequences = embedding_layer(sequence_input)
 x = Conv1D(128, 5, activation='relu')(embedded_sequences)
 x = MaxPooling1D(5)(x)

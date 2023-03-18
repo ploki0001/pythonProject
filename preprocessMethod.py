@@ -3,10 +3,10 @@ from nltk.stem import *
 from nltk.stem.lancaster import LancasterStemmer
 import numpy as np
 import re
-def preprocessData(file):
-    file = file.lower().split()
+def preprocessData(text):
+    text = text.lower().split()
     new_text = ""
-    for word in file:
+    for word in text:
         if word not in stopwords.words('english'):
             new_text = new_text + " " + word
 
@@ -30,4 +30,5 @@ def preprocessData(file):
     str1 = ""
     for ele in result:
         str1 += ele + ' '
+
     return str1
